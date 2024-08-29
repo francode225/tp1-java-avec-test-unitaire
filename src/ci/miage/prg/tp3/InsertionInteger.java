@@ -1,11 +1,12 @@
-package ci.miage.prg.tp3;
+package ci.miage.prg1.tp3;
 
 import java.util.Scanner;
 
 /**
- * @author Mickaël Foursov <foursov@univ-rennes1.fr>
+ * @author Yeo François Gneneman <foursov@univ-rennes1.fr>
+ * @author Yapi Yapo <foursov@univ-rennes1.fr>
  * @version 5.0
- * @since 2022-09-23
+ * @since 2023-10-29
  * 
  *        Partie I
  * 
@@ -16,25 +17,25 @@ import java.util.Scanner;
  *        Construction et affichage d'un tableau contenant les entiers distincts
  *        triés par valeur croissante.
  * 
- *        Exemple. En entrée : 3 8 1 4 3 2 1 3 -1 ==> En sortie : 1 2 3 4 8
+ *        Exemple. En entrée : 3 8 1 4 3 2 1 3 -1 → En sortie : 1 2 3 4 8
  */
 
 public class InsertionInteger {
-
 	private static final int SIZE_MAX = 10;
-	private static final int END_MARKER = -1;
+	public static final int END_MARKER = -1;
 	/**
 	 * nombre d’entiers présents dans t, 0 <= size <= SIZE_MAX
 	 */
-	private int size = 0;
+	private int size=0;
 	private int[] array = new int[SIZE_MAX];
 
 	/**
 	 * @return copie de la partie remplie du tableau
 	 */
 	public int[] toArray() {
-
-		 return ;
+		int[] tableauCopie = new int[size];
+		System.arraycopy(array, 0, tableauCopie, 0, size);
+		return tableauCopie;
 	}
 
 	/**
@@ -44,7 +45,11 @@ public class InsertionInteger {
 	 * @param scanner
 	 */
 	public void createArray(Scanner scanner) {
-
+		int nombre = scanner.nextInt();
+		while (nombre != END_MARKER){
+			insert(nombre);
+			nombre = scanner.nextInt();
+		}
 	}
 
 	/**
@@ -65,16 +70,36 @@ public class InsertionInteger {
 	 * @pre les valeurs de array[0..size-1] sont triées par ordre croissant
 	 * 
 	 * @return false si value appartient à array[0..size-1] ou si array est
-	 *         complètement rempli; true si value n’appartient pas à
+	 *         complètement rempli ; true si value n’appartient pas à
 	 *         array[0..size-1]
 	 */
-	public boolean insert(int value) {
 
+	public boolean appartenir(int value){
+		for (int i=0; i<size;i++){
+			if (array[i] == value) return true;
+		}
 		return false;
+	}
+	public boolean insert(int value) {
+		if (size==SIZE_MAX || appartenir(value)) return false;
+
+		int i = size-1;
+		while (i >=0 && array[i] > value) {
+			array[i + 1] = array[i];
+			i--;
+		}
+		array[i + 1] = value;
+		size++;
+		return true;
 	}
 
 	@Override
 	public String toString() {
-		return null;
+		StringBuilder chaine = new StringBuilder("");
+		for (int i=0; i<size;i++){
+			chaine.append(array[i]);
+			chaine.append(" ");
+		}
+		return chaine.toString();
 	}
 }

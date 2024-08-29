@@ -1,10 +1,10 @@
-package ci.miage.prg.tp3;
-
+package ci.miage.prg1.tp3;
 import java.util.Scanner;
 
 /**
- * 
- * @author Mickaël Foursov <foursov@univ-rennes1.fr>
+ *
+ * @author YEO François <foursov@univ-rennes1.fr>
+ * @author YAPI Yapo <foursov@univ-rennes1.fr>
  * @version 5.0
  * @since 2022-09-23
  * 
@@ -28,14 +28,16 @@ public class InsertionPair {
 	/**
 	 * nombre de doublets présents dans t, 0 <= size <= SIZE_MAX
 	 */
-	private int size;
-	private Pair[] array;
+	private int size =0;
+	private Pair[] array = new Pair[SIZE_MAX];
 
 	/**
 	 * @return copie de la partie remplie du tableau
 	 */
 	public Pair[] toArray() {
-		return null;
+		Pair[] tableauCopie = new Pair[size];
+		System.arraycopy(array,0, tableauCopie, 0, size);
+		return tableauCopie;
 	}
 
 	/**
@@ -44,7 +46,29 @@ public class InsertionPair {
 	 * 
 	 * @param scanner
 	 */
+
 	public void createArray(Scanner scanner) {
+
+		int[] tableauPair = new  int[2];
+		int indice=0;
+		int nombre = scanner.nextInt();
+
+		while (nombre != END_MARKER){
+			tableauPair[indice]=nombre;
+
+			if (tableauPair[1] == 0) {
+				tableauPair[1] = (tableauPair[0] > nombre) ? tableauPair[0] : nombre;
+				tableauPair[0] = (tableauPair[0] > nombre) ? nombre : tableauPair[0];
+			}
+			indice++;
+			if (indice>= 2){
+				Pair pair = new Pair(tableauPair[0],tableauPair[1]);
+				insert(pair);
+				indice=0;
+				tableauPair = new int[2];
+			}
+			nombre = scanner.nextInt();
+		}
 	}
 
 	/**
@@ -60,11 +84,51 @@ public class InsertionPair {
 	 *         complètement rempli; true si pair n’appartient pas à array[0..size-1]
 	 */
 	public boolean insert(Pair pair) {
-		return false;
+
+		if (size>=SIZE_MAX){
+			return false;
+		}
+		if (size == 0){
+			array[0]=pair;
+			size = 1;
+			return true;
+		}
+		for (int i=0;i<size;i++){
+			if (array[i].compareTo(pair) == 0){
+				return false;
+			}
+		}
+
+		size++;
+
+		if (array[size-2].compareTo(pair) < 0){
+			array[size-1]=pair;
+			return true;
+		}
+
+		int j = size -1;
+
+
+		while (j>0){
+			if (array[j-1].compareTo(pair) > 0){
+				array[j] = array[j-1];
+				array[j-1] =pair;
+			}else{
+				break;
+			}
+			j--;
+		}
+		return true;
 	}
 
 	@Override
 	public String toString() {
-		return null;
+		StringBuilder chaine = new StringBuilder("");
+		for (int i=0; i<size;i++){
+			chaine.append(array[i]);
+			chaine.append(" ");
+		}
+		return chaine.toString().trim();
 	}
+
 }
